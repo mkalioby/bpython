@@ -6,8 +6,7 @@ This project is based on [bpython](https://github.com/bpython/bpython) REPL, I l
 
 ## Examples
 
-![example1](./example1.png)
-![example2](./example2.png)
+[![asciicast](https://asciinema.org/a/443735.png)](https://asciinema.org/a/443735?speed=3&t=10)
 
 ## Install
 
