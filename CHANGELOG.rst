@@ -1,8 +1,21 @@
 Changelog
 =========
 
-0.22
+0.23
 ----
+
+General information:
+
+New features:
+* Auto-closing brackets option added. To enable, add `brackets_completion = True` in the bpython config (press F3 to create)
+  Thanks to samuelgregorovic
+
+Fixes:
+
+* Support for Python 3.6 has been dropped.
+
+0.22.11
+--------
 
 General information:
 
@@ -27,6 +40,10 @@ Fixes:
 * #909: Fix sys.stdin.readline
 * #917: Fix tab completion for dict keys
 * #919: Replicate python behavior when running with -i and a non-existing file
+* #932: Fix handling of __signature__ for completion.
+  Thanks to gpotter2
+* #938: Fix missing dependency on typing_extensions.
+  Thanks to Dustin Rodrigues
 
 Changes to dependencies:
 

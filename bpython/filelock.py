@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 from typing import Optional, Type, IO
+from typing_extensions import Literal
 from types import TracebackType
 
 has_fcntl = True
@@ -59,9 +60,10 @@ class BaseLock:
         exc_type: Optional[Type[BaseException]],
         exc: Optional[BaseException],
         exc_tb: Optional[TracebackType],
-    ) -> None:
+    ) -> Literal[False]:
         if self.locked:
             self.release()
+        return False
 
     def __del__(self) -> None:
         if self.locked:

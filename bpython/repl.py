@@ -36,10 +36,12 @@ import traceback
 from abc import abstractmethod
 from itertools import takewhile
 from pathlib import Path
+from types import ModuleType, TracebackType
+from typing import cast, Tuple, Any, Optional, Type
+from typing_extensions import Literal
+
 from pygments.lexers import Python3Lexer
 from pygments.token import Token
-from types import ModuleType
-from typing import cast, Tuple, Any
 
 have_pyperclip = True
 try:
@@ -68,7 +70,12 @@ class RuntimeTimer:
     def __enter__(self):
         self.start = self.time()
 
-    def __exit__(self, ty, val, tb):
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Literal[False]:
         self.last_command = self.time() - self.start
         self.running_time += self.last_command
         return False
@@ -257,9 +264,6 @@ class MatchesIterator:
         if self.index == -1:
             raise ValueError("No current match.")
         return self.matches[self.index]
-
-    def next(self):
-        return self.__next__()
 
     def __next__(self):
         self.index = (self.index + 1) % len(self.matches)
@@ -598,12 +602,9 @@ class Repl:
                     )
                 except simpleeval.EvaluationError:
                     return False
-
             if inspect.isclass(f):
                 class_f = None
 
-                if hasattr(f, "__init__") and f.__init__ is not object.__init__:
-                    class_f = f.__init__
                 if (
                     (not class_f or not inspection.getfuncprops(func, class_f, f))
                     and hasattr(f, "__new__")
@@ -613,7 +614,8 @@ class Repl:
                     f.__new__.__class__ is not object.__new__.__class__
                 ):
                     class_f = f.__new__
-
+                elif hasattr(f, "__init__") and f.__init__ is not object.__init__:
+                    class_f = f.__init__
                 if class_f:
                     self.funcprops = inspection.getfuncprops(func, class_f, f)
                     f = class_f
@@ -649,7 +651,7 @@ class Repl:
                     raise SourceNotFound(_("Nothing to get source of"))
                 if inspection.is_eval_safe_name(line):
                     obj = self.get_object(line)
-            return inspection.get_source_unicode(obj)
+            return inspect.getsource(obj)
         except (AttributeError, NameError) as e:
             msg = _("Cannot get source: %s") % (e,)
         except OSError as e:

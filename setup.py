@@ -78,7 +78,7 @@ version = "unknown"
 try:
     # get version from git describe
     proc = subprocess.Popen(
-        ["git", "describe", "--tags"],
+        ["git", "describe", "--tags", "--first-parent"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -179,7 +179,7 @@ for language in os.listdir(translations_dir):
 
 setup(
     name='bpython-django',
-    version="0.22.2",
+    version="0.22.11",
     author='Mohamed ElKalioby',
     author_email="mkalioby@mkalioby.com",
     description='Customized bpython for Django Projects',
@@ -188,7 +188,7 @@ setup(
     data_files=data_files,
     url = 'https://github.com/mkalioby/bpython-django/',
     download_url='https://github.com/mkalioby/bpython-django/',
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     package_data={
         "bpython": ["sample-config"],
         "bpython.translations": mo_files,
@@ -205,12 +205,11 @@ setup(
         "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.0",
         "Framework :: Django :: 3.1",
+        "Framework :: Django :: 3.2",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
